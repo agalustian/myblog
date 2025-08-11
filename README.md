@@ -1,1 +1,1 @@
-# myblog
+# Awesome blog project
