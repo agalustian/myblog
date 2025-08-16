@@ -8,7 +8,8 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
-    application
+    id "application"
+    id "war"
 }
 
 repositories {
@@ -19,15 +20,20 @@ repositories {
 dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("org.springframework:spring-webmvc:6.2.1")
+    implementation("org.springframework.data:spring-data-jdbc:3.4.1")
+    implementation("jakarta.servlet:jakarta.servlet-api:4.0.2")
+    implementation("org.thymeleaf:thymeleaf:3.1.2.RELEASE")
+    implementation("com.h2database:h2:2.2.224")
+
+    testImplementation(platform("org.junit:junit-bom:5.13.4"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter("5.12.1")
-        }
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }
 
@@ -40,5 +46,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.App"
+    mainClass = "ru.blog.WebApplication"
 }
