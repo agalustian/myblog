@@ -1,4 +1,4 @@
-package ru.blog.models;
+package ru.blog.dto;
 
 public class Paging {
   private final Integer pageNumber;

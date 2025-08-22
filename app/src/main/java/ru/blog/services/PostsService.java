@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 import ru.blog.models.PostComment;
 import ru.blog.models.PostDetails;
 import ru.blog.models.PostPreview;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.ports.PostCommentsRepository;
 import ru.blog.services.ports.PostImagesRepository;
 import ru.blog.services.ports.PostLikesRepository;

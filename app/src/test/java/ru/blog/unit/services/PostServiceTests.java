@@ -17,7 +17,7 @@ import ru.blog.generators.PostCommentsGenerator;
 import ru.blog.generators.PostDetailsGenerator;
 import ru.blog.generators.PostLikesCountGenerator;
 import ru.blog.generators.PostPreviewsGenerator;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.PostsService;
 import ru.blog.services.ports.PostCommentsRepository;
 import ru.blog.services.ports.PostImagesRepository;

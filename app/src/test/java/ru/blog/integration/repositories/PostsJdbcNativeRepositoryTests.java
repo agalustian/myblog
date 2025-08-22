@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.blog.generators.PostDetailsGenerator;
 import ru.blog.integration.testConfiguration.RepositoriesConfiguration;
 import ru.blog.models.PostDetails;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.ports.PostLikesRepository;
 import ru.blog.services.ports.PostsRepository;
 
