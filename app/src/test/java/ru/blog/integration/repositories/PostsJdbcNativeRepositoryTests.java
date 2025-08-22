@@ -157,4 +157,17 @@ public class PostsJdbcNativeRepositoryTests {
     Assertions.assertEquals(1, postPreviews.size());
   }
 
+  @Test
+  public void shouldFindPostPreviewsCountByTag() {
+    var postDetails = PostDetailsGenerator.generate();
+    var anotherPostDetails = PostDetailsGenerator.generate("test-tag");
+    postsRepository.save(postDetails);
+    postsRepository.save(anotherPostDetails);
+
+    var totalCount = postsRepository.searchPostPreviewCount(new SearchPostsFilter("test-tag"));
+
+    Assertions.assertNotNull(totalCount);
+    Assertions.assertEquals(1, totalCount);
+  }
+
 }

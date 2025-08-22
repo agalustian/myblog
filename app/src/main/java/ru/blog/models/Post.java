@@ -20,9 +20,6 @@ public abstract class Post {
 
   private final List<String> tags;
 
-  // TODO this is bad decision, fix it
-  private Integer totalCount;
-
   private Integer likesCount;
 
   protected Post(String id, String title, String text, String userId, List<String> tags, String createdAt,
@@ -68,16 +65,8 @@ public abstract class Post {
     return tags;
   }
 
-  public Integer getTotalCount() {
-    return totalCount;
-  }
-
   public Integer getLikesCount() {
     return likesCount;
-  }
-
-  public void setTotalCount(int totalCount) {
-    this.totalCount = totalCount;
   }
 
   public void setLikesCount(int likesCount) {

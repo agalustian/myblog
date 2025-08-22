@@ -16,6 +16,8 @@ public interface PostsRepository {
 
   List<PostPreview> searchPostPreview(SearchPostsFilter searchPostsFilter, PageRequest pageRequest);
 
+  Integer searchPostPreviewCount(SearchPostsFilter searchPostsFilter);
+
   void remove(String postId, String userId);
 
   Map<String, Integer> findPostsLikesCount(List<String> postIds);

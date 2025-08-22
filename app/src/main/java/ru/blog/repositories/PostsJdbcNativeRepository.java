@@ -9,9 +9,9 @@ import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.models.PostDetails;
 import ru.blog.models.PostPreview;
-import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.ports.PostsRepository;
 
 @Repository
@@ -118,31 +118,58 @@ public class PostsJdbcNativeRepository implements PostsRepository {
     return result;
   }
 
-  @Override
-  public List<PostPreview> searchPostPreview(SearchPostsFilter searchPostsFilter, PageRequest pageRequest) {
-    String selectQuery = "select posts.*, COUNT(*) OVER () AS total_rows from posts ";
-    String whereFilter = "";
+  private boolean searchPostsFilterTagIsNotEmpty(SearchPostsFilter searchPostsFilter) {
+    return searchPostsFilter.tag() != null && !searchPostsFilter.tag().isEmpty();
+  }
+
+  private List<Object> generateSearchPreviewParameters(SearchPostsFilter searchPostsFilter) {
     List<Object> parameters = new ArrayList<>();
 
-    if (searchPostsFilter.tag() != null && !searchPostsFilter.tag().isEmpty()) {
-      // TODO use array of tags
-      whereFilter += "tags like ?";
+    if (searchPostsFilterTagIsNotEmpty(searchPostsFilter)) {
       parameters.add("%" + searchPostsFilter.tag() + "%");
     }
+
+    return parameters;
+  }
+
+  private String generateSearchPreviewWhereFilter(SearchPostsFilter searchPostsFilter) {
+    String whereFilter = "";
+
+    if (searchPostsFilterTagIsNotEmpty(searchPostsFilter)) {
+      // TODO use array of tags
+      whereFilter += "tags like ?";
+    }
+
+    return whereFilter.isEmpty() ? "" : " where " + whereFilter;
+  }
+
+  @Override
+  public Integer searchPostPreviewCount(SearchPostsFilter searchPostsFilter) {
+    return jdbcTemplate.query(
+        "select count(*) as count from posts " + generateSearchPreviewWhereFilter(searchPostsFilter),
+        (rs, rowNumber) -> rs.getInt("count"),
+        generateSearchPreviewParameters(searchPostsFilter).toArray()
+    ).getFirst();
+  }
+
+  @Override
+  public List<PostPreview> searchPostPreview(SearchPostsFilter searchPostsFilter, PageRequest pageRequest) {
+    String selectQuery = "select posts.* from posts ";
+    List<Object> parameters = generateSearchPreviewParameters(searchPostsFilter);
 
     parameters.add(pageRequest.getPageSize());
     parameters.add((pageRequest.getPageNumber() - 1) * pageRequest.getPageSize());
 
     return jdbcTemplate.query(
         selectQuery +
-            (whereFilter.isEmpty() ? "" : " where " + whereFilter) +
+            generateSearchPreviewWhereFilter(searchPostsFilter) +
             """
                     order by created_at desc 
                     limit ? 
                     offset ?; 
                 """,
         (rs, rowNumber) -> {
-          var postPreview = new PostPreview(
+          return new PostPreview(
               rs.getString("id"),
               rs.getString("title"),
               rs.getString("text"),
@@ -151,10 +178,6 @@ public class PostsJdbcNativeRepository implements PostsRepository {
               rs.getString("created_at"),
               rs.getString("updated_at")
           );
-
-          postPreview.setTotalCount(rs.getInt("total_rows"));
-
-          return postPreview;
         },
         parameters.toArray()
     );

@@ -104,13 +104,16 @@ public class PostsController {
                                   Integer pageSize,
                                   final Model model) {
     var pageRequest = PageRequest.of(pageNumber, pageSize);
+    var searchFilter = new SearchPostsFilter(searchByTag);
 
-    List<PostPreview> postPreviews = postsService.searchPostPreview(new SearchPostsFilter(searchByTag), pageRequest);
+    List<PostPreview> postPreviews = postsService.searchPostPreview(searchFilter, pageRequest);
 
     if (postPreviews != null && !postPreviews.isEmpty() ) {
+      Integer totalCount = postsService.searchPostPreviewCount(searchFilter);
+
       model.addAttribute("posts", postPreviews);
       model.addAttribute("paging",
-          new Paging(pageRequest.getPageNumber(), pageRequest.getPageSize(), postPreviews.getFirst().getTotalCount()));
+          new Paging(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount));
 
     }
 
