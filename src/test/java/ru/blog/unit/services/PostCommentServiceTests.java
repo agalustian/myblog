@@ -6,20 +6,15 @@ import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.mockito.Mockito;
 import ru.blog.models.PostComment;
 import ru.blog.services.PostCommentsService;
 import ru.blog.services.ports.PostCommentsRepository;
 
-@SpringBootTest(classes = {PostCommentsRepository.class, PostCommentsService.class})
 public class PostCommentServiceTests {
-  @MockitoBean
-  private PostCommentsRepository postCommentsRepository;
+  private final PostCommentsRepository postCommentsRepository = Mockito.mock(PostCommentsRepository.class);
 
-  @Autowired
-  private PostCommentsService postCommentsService;
+  private final PostCommentsService postCommentsService = new PostCommentsService(postCommentsRepository);
 
   private static final String COMMENT_ID = "commentId";
   private static final String POST_ID = "postId";
