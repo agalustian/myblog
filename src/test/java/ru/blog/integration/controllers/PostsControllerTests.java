@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-@TestPropertySource(locations = "classpath:application.properties")
+@TestPropertySource(locations = "classpath:application.yaml")
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("controller-test")
