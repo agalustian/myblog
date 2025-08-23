@@ -11,39 +11,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import ru.blog.integration.testConfiguration.JdbcTestConfiguration;
-import ru.blog.integration.testConfiguration.WebConfiguration;
 
-@ExtendWith(SpringExtension.class)
-@SpringJUnitConfig(classes = {JdbcTestConfiguration.class, WebConfiguration.class})
-@WebAppConfiguration
 @TestPropertySource(locations = "classpath:application.properties")
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("controller-test")
 public class PostsControllerTests {
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
+
+  private final MockMvc mockMvc;
 
   @Autowired
-  private WebApplicationContext webApplicationContext;
-
-  private MockMvc mockMvc;
+  PostsControllerTests(final MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
+    this.mockMvc = mockMvc;
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
   @BeforeEach
   void setUp() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     jdbcTemplate.execute("DELETE FROM posts");
     jdbcTemplate.execute("""
         insert into posts (id, title, text, user_id, tags)
