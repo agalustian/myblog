@@ -66,7 +66,7 @@ public class PostsService {
     Assert.notNull(postId, "Post id is required for getting posts details");
 
     PostDetails postDetails = postsRepository.getPostDetailsById(postId);
-    List<PostComment> postComments = postCommentsRepository.getComments(postId);
+    List<PostComment> postComments = postCommentsRepository.getPostCommentsByPostId(postId);
 
     postDetails.setComments(postComments);
 

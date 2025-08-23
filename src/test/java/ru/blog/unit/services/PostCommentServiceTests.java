@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.blog.models.PostComment;
 import ru.blog.services.PostCommentsService;
 import ru.blog.services.ports.PostCommentsRepository;
 
@@ -24,29 +25,17 @@ public class PostCommentServiceTests {
 
     @Test
     void shouldSavePostComment() {
-      postCommentsService.save(POST_ID, USER_ID, "testComment");
+      var expectedPostComment = PostComment.from(POST_ID, USER_ID, "testComment");
 
-      verify(postCommentsRepository, times(1)).save(POST_ID, USER_ID, "testComment");
+      postCommentsService.save(expectedPostComment);
+
+      verify(postCommentsRepository, times(1)).save(expectedPostComment);
     }
 
     @Test
     void shouldThrowAssertionErrorOnEmptyPostId() {
       Assertions.assertThrows(IllegalArgumentException.class, () -> {
-        postCommentsService.save(null, USER_ID, "testComment");
-      });
-    }
-
-    @Test
-    void shouldThrowAssertionErrorOnEmptyUserId() {
-      Assertions.assertThrows(IllegalArgumentException.class, () -> {
-        postCommentsService.save(POST_ID, null, "testComment");
-      });
-    }
-
-    @Test
-    void shouldThrowAssertionErrorOnEmptyComment() {
-      Assertions.assertThrows(IllegalArgumentException.class, () -> {
-        postCommentsService.save(POST_ID, USER_ID, null);
+        postCommentsService.save(null);
       });
     }
 
@@ -59,7 +48,7 @@ public class PostCommentServiceTests {
     void shouldSavePostComment() {
       postCommentsService.update(COMMENT_ID, USER_ID, "testComment");
 
-      verify(postCommentsRepository, times(1)).update(COMMENT_ID, USER_ID, "testComment");
+      verify(postCommentsRepository, times(1)).patchComment(COMMENT_ID, USER_ID, "testComment");
     }
 
     @Test
@@ -92,7 +81,7 @@ public class PostCommentServiceTests {
     void shouldSavePostComment() {
       postCommentsService.remove(COMMENT_ID, USER_ID);
 
-      verify(postCommentsRepository, times(1)).remove(COMMENT_ID, USER_ID);
+      verify(postCommentsRepository, times(1)).removePostCommentByIdAndUserId(COMMENT_ID, USER_ID);
     }
 
     @Test

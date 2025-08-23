@@ -18,8 +18,8 @@ import ru.blog.generators.PostDetailsGenerator;
 import ru.blog.generators.PostLikesCountGenerator;
 import ru.blog.generators.PostPreviewsGenerator;
 import ru.blog.dto.SearchPostsFilter;
-import ru.blog.services.PostsService;
 import ru.blog.services.ports.PostCommentsRepository;
+import ru.blog.services.PostsService;
 import ru.blog.services.ports.PostImagesRepository;
 import ru.blog.services.ports.PostLikesRepository;
 import ru.blog.services.ports.PostsRepository;
@@ -204,12 +204,12 @@ public class PostServiceTests {
       var postComments = PostCommentsGenerator.generate();
 
       Mockito.when(postsRepository.getPostDetailsById(postDetails.getId())).thenReturn(postDetails);
-      Mockito.when(postCommentsRepository.getComments(postDetails.getId())).thenReturn(postComments);
+      Mockito.when(postCommentsRepository.getPostCommentsByPostId(postDetails.getId())).thenReturn(postComments);
 
       var foundPostDetails = postsService.getPostDetailsById(postDetails.getId());
 
       verify(postsRepository, times(1)).getPostDetailsById(postDetails.getId());
-      verify(postCommentsRepository, times(1)).getComments(postDetails.getId());
+      verify(postCommentsRepository, times(1)).getPostCommentsByPostId(postDetails.getId());
 
       Assertions.assertEquals(postDetails.getId(), foundPostDetails.getId());
       Assertions.assertEquals(postDetails.getTitle(), foundPostDetails.getTitle());
@@ -223,7 +223,7 @@ public class PostServiceTests {
       var postDetails = PostDetailsGenerator.generate();
 
       Mockito.when(postsRepository.getPostDetailsById(postDetails.getId())).thenReturn(postDetails);
-      Mockito.when(postCommentsRepository.getComments(postDetails.getId())).thenReturn(new ArrayList<>());
+      Mockito.when(postCommentsRepository.getPostCommentsByPostId(postDetails.getId())).thenReturn(new ArrayList<>());
 
       var foundPostDetails = postsService.getPostDetailsById(postDetails.getId());
 

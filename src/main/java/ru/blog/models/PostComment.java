@@ -1,17 +1,33 @@
 package ru.blog.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.util.Objects;
+import java.util.UUID;
+
+@Entity
+@Table(name = "post_comments")
 public class PostComment {
-  private final String id;
 
-  private final String postId;
+  @Id
+  private String id;
 
-  private final String userId;
+  @Column(name = "post_id", nullable = false, updatable = false)
+  private String postId;
 
-  private final String comment;
+  @Column(name = "user_id", nullable = false, updatable = false)
+  private String userId;
 
-  private final String createdAt;
+  @Column(name = "comment", nullable = false)
+  private String comment;
 
-  private final String updatedAt;
+  @Column(name = "created_at", updatable = false)
+  private String createdAt;
+
+  @Column(name = "updated_at", updatable = false)
+  private String updatedAt;
 
   public PostComment(String id, String postId, String userId, String comment, String createdAt, String updatedAt) {
     this.id = id;
@@ -19,6 +35,42 @@ public class PostComment {
     this.userId = userId;
     this.comment = comment;
     this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+
+  protected PostComment() {
+  }
+
+  public static PostComment from(String postId, String userId, String comment) {
+    return new PostComment(UUID.randomUUID().toString(), postId, userId, comment, null, null);
+  }
+
+  public static PostComment from(PostComment postComment, String newComment) {
+    return new PostComment(postComment.getId(), postComment.getPostId(), postComment.getUserId(),
+        newComment, null, null);
+  }
+
+  private void setId(String id) {
+    this.id = id;
+  }
+
+  private void setPostId(String postId) {
+    this.postId = postId;
+  }
+
+  private void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  private void setComment(String comment) {
+    this.comment = comment;
+  }
+
+  private void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  private void setUpdatedAt(String updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -44,6 +96,21 @@ public class PostComment {
 
   public String getUpdatedAt() {
     return updatedAt;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PostComment that = (PostComment) o;
+    return Objects.equals(id, that.id) && Objects.equals(postId, that.postId) &&
+        Objects.equals(userId, that.userId) && Objects.equals(comment, that.comment);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, postId, userId, comment);
   }
 
 }

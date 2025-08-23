@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.blog.models.PostComment;
 import ru.blog.services.PostCommentsService;
 
 @Controller
@@ -21,7 +22,7 @@ public class PostCommentsController {
 
   @PostMapping
   String save(@PathVariable("id") String postId, @RequestParam("text") String comment) {
-    postCommentsService.save(postId, "CURRENT_USER", comment);
+    postCommentsService.save(PostComment.from(postId, "CURRENT_USER", comment));
 
     return  REDIRECT_PATH_TO_POST+postId;
   }

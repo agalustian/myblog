@@ -1,17 +1,12 @@
 package ru.blog.services.ports;
 
 import java.util.List;
-import java.util.Map;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.blog.models.PostComment;
+import ru.blog.repositories.PostCommentsRepositoryCustom;
 
-public interface PostCommentsRepository {
-  void save(String postId, String userId, String comment);
+public interface PostCommentsRepository extends PostCommentsRepositoryCustom, JpaRepository<PostComment, String> {
+  void removePostCommentByIdAndUserId(String id, String userId);
 
-  void update(String commentId, String userId, String comment);
-
-  List<PostComment> getComments(String postId);
-
-  void remove(String postId, String userId);
-
-  Map<String, Integer> findPostsCommentsCount(final List<String> postId);
+  List<PostComment> getPostCommentsByPostId(String postId);
 }
