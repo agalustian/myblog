@@ -4,21 +4,23 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ActiveProfiles;
 import ru.blog.generators.PostDetailsGenerator;
-import ru.blog.integration.testConfiguration.RepositoriesConfiguration;
 import ru.blog.models.PostDetails;
 import ru.blog.dto.SearchPostsFilter;
+import ru.blog.repositories.PostsJdbcNativeRepository;
+import ru.blog.repositories.PostsLikesJdbcNativeRepository;
 import ru.blog.services.ports.PostLikesRepository;
 import ru.blog.services.ports.PostsRepository;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = RepositoriesConfiguration.class)
+@ActiveProfiles("test")
+@DataJdbcTest
+@Import({PostsJdbcNativeRepository.class, PostsLikesJdbcNativeRepository.class})
 public class PostsJdbcNativeRepositoryTests {
 
   @Autowired
