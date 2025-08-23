@@ -70,7 +70,6 @@
 	</dependencies>
 
 	<build>
-		<testSourceDirectory>${project.basedir}/src/test/java/ru/blog</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
