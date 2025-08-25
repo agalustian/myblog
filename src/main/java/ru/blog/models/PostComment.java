@@ -38,16 +38,22 @@ public class PostComment {
     this.updatedAt = updatedAt;
   }
 
+  public PostComment(String id, String postId, String userId, String comment) {
+    this.id = id;
+    this.postId = postId;
+    this.userId = userId;
+    this.comment = comment;
+  }
+
   protected PostComment() {
   }
 
   public static PostComment from(String postId, String userId, String comment) {
-    return new PostComment(UUID.randomUUID().toString(), postId, userId, comment, null, null);
+    return new PostComment(UUID.randomUUID().toString(), postId, userId, comment);
   }
 
   public static PostComment from(PostComment postComment, String newComment) {
-    return new PostComment(postComment.getId(), postComment.getPostId(), postComment.getUserId(),
-        newComment, null, null);
+    return new PostComment(postComment.getId(), postComment.getPostId(), postComment.getUserId(), newComment);
   }
 
   private void setId(String id) {
