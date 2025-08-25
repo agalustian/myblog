@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.blog.models.PostComment;
+import ru.blog.services.ports.PostCommentsRepository;
 
 @TestPropertySource(locations = "classpath:application.yaml")
 @SpringBootTest
@@ -21,16 +23,19 @@ public class PostCommentsControllerTests {
 
   private final JdbcTemplate jdbcTemplate;
 
+  private final PostCommentsRepository postCommentsRepository;
+
   @Autowired
-  PostCommentsControllerTests(final MockMvc mockMvc, JdbcTemplate jdbcTemplate) {
+  PostCommentsControllerTests(final MockMvc mockMvc, JdbcTemplate jdbcTemplate,
+                              PostCommentsRepository postCommentsRepository) {
     this.mockMvc = mockMvc;
     this.jdbcTemplate = jdbcTemplate;
+    this.postCommentsRepository = postCommentsRepository;
   }
 
   @BeforeEach
   void setUp() {
     jdbcTemplate.execute("DELETE FROM posts");
-    jdbcTemplate.execute("DELETE FROM post_comments");
     jdbcTemplate.execute("""
         insert into posts (id, title, text, user_id, tags)
                 values (
@@ -43,13 +48,11 @@ public class PostCommentsControllerTests {
                         'Иванов',
                         'awesome first')
         """);
-    jdbcTemplate.execute("""
-        insert into post_comments (id, post_id, user_id, comment)
-        values ('726f8caf-366a-4f2d-a5a4-b7ebd4390e9c',
-                '726f8caf-366a-4f2d-a5a4-b7ebd4310e9c',
-                'Иванов',
-                'Awesome great comment!')
-        """);
+
+    postCommentsRepository.deleteAll();
+    postCommentsRepository.save(
+        new PostComment("726f8caf-366a-4f2d-a5a4-b7ebd4390e9c", "726f8caf-366a-4f2d-a5a4-b7ebd4310e9c", "Иванов",
+            "Awesome great comment!"));
 
   }
 
