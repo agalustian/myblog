@@ -1,0 +1,51 @@
+plugins {
+    id 'application'
+    id 'war'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(libs.guava)
+    implementation('org.springframework:spring-webmvc:6.2.0')
+    implementation('org.springframework.data:spring-data-jdbc:3.4.1')
+    implementation('jakarta.servlet:jakarta.servlet-api:4.0.2')
+    implementation('org.thymeleaf:thymeleaf:3.1.2.RELEASE')
+    implementation('org.thymeleaf:thymeleaf-spring6:3.1.2.RELEASE')
+    implementation('com.h2database:h2:2.2.224')
+
+    testImplementation('org.springframework:spring-test:6.2.0')
+    testImplementation(platform('org.junit:junit-bom:5.13.4'))
+    testImplementation ('org.junit.jupiter:junit-jupiter-api:5.8.1')
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation('org.mockito:mockito-core:5.+')
+    testImplementation('jakarta.servlet:jakarta.servlet-api:6.0.0')
+    testImplementation('org.hamcrest:hamcrest:2.2')
+
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.1')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+war {
+    destinationDirectory = file('target/myblog')
+    archiveFileName = 'myblog.war'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'ru.blog.WebApplication'
+}
