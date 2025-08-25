@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 import ru.blog.models.PostComment;
 import ru.blog.models.PostDetails;
 import ru.blog.models.PostPreview;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.ports.PostCommentsRepository;
 import ru.blog.services.ports.PostImagesRepository;
 import ru.blog.services.ports.PostLikesRepository;
@@ -40,7 +40,6 @@ public class PostsService {
     Assert.notNull(pageRequest, "Page request is required for searching post previews");
 
     List<PostPreview> postPreviews = postsRepository.searchPostPreview(searchPostsFilter, pageRequest);
-
     List<String> postPreviewIds = postPreviews.stream().map(PostPreview::getId).toList();
 
     Map<String, Integer> likes = postsRepository.findPostsLikesCount(postPreviewIds);
@@ -55,6 +54,12 @@ public class PostsService {
     }
 
     return postPreviews;
+  }
+
+  public Integer searchPostPreviewCount(SearchPostsFilter searchPostsFilter) {
+    Assert.notNull(searchPostsFilter, "Search posts filter is required for searching post previews count");
+
+    return postsRepository.searchPostPreviewCount(searchPostsFilter);
   }
 
   public PostDetails getPostDetailsById(final String postId) {

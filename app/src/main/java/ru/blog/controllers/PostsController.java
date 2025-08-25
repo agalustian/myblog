@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import ru.blog.models.Paging;
+import ru.blog.dto.Paging;
 import ru.blog.models.PostDetails;
 import ru.blog.models.PostPreview;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.PostsService;
 
 @Controller
@@ -104,13 +104,16 @@ public class PostsController {
                                   Integer pageSize,
                                   final Model model) {
     var pageRequest = PageRequest.of(pageNumber, pageSize);
+    var searchFilter = new SearchPostsFilter(searchByTag);
 
-    List<PostPreview> postPreviews = postsService.searchPostPreview(new SearchPostsFilter(searchByTag), pageRequest);
+    List<PostPreview> postPreviews = postsService.searchPostPreview(searchFilter, pageRequest);
 
     if (postPreviews != null && !postPreviews.isEmpty() ) {
+      Integer totalCount = postsService.searchPostPreviewCount(searchFilter);
+
       model.addAttribute("posts", postPreviews);
       model.addAttribute("paging",
-          new Paging(pageRequest.getPageNumber(), pageRequest.getPageSize(), postPreviews.getFirst().getTotalCount()));
+          new Paging(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount));
 
     }
 

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.data.domain.PageRequest;
 import ru.blog.models.PostDetails;
 import ru.blog.models.PostPreview;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 
 public interface PostsRepository {
   String save(PostDetails postDetails);
@@ -15,6 +15,8 @@ public interface PostsRepository {
   PostDetails getPostDetailsById(String id);
 
   List<PostPreview> searchPostPreview(SearchPostsFilter searchPostsFilter, PageRequest pageRequest);
+
+  Integer searchPostPreviewCount(SearchPostsFilter searchPostsFilter);
 
   void remove(String postId, String userId);
 

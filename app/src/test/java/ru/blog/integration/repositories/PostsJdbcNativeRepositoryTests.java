@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.blog.generators.PostDetailsGenerator;
 import ru.blog.integration.testConfiguration.RepositoriesConfiguration;
 import ru.blog.models.PostDetails;
-import ru.blog.models.SearchPostsFilter;
+import ru.blog.dto.SearchPostsFilter;
 import ru.blog.services.ports.PostLikesRepository;
 import ru.blog.services.ports.PostsRepository;
 
@@ -155,6 +155,19 @@ public class PostsJdbcNativeRepositoryTests {
 
     Assertions.assertNotNull(postPreviews);
     Assertions.assertEquals(1, postPreviews.size());
+  }
+
+  @Test
+  public void shouldFindPostPreviewsCountByTag() {
+    var postDetails = PostDetailsGenerator.generate();
+    var anotherPostDetails = PostDetailsGenerator.generate("test-tag");
+    postsRepository.save(postDetails);
+    postsRepository.save(anotherPostDetails);
+
+    var totalCount = postsRepository.searchPostPreviewCount(new SearchPostsFilter("test-tag"));
+
+    Assertions.assertNotNull(totalCount);
+    Assertions.assertEquals(1, totalCount);
   }
 
 }
