@@ -16,15 +16,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @TestPropertySource(locations = "classpath:application.yaml")
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("controller-test")
-public class PostsControllerTests {
+class PostsControllerTests {
 
   private final JdbcTemplate jdbcTemplate;
 
