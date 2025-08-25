@@ -11,32 +11,41 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ru.blog.generators.PostCommentsCountGenerator;
 import ru.blog.generators.PostCommentsGenerator;
 import ru.blog.generators.PostDetailsGenerator;
 import ru.blog.generators.PostLikesCountGenerator;
 import ru.blog.generators.PostPreviewsGenerator;
 import ru.blog.dto.SearchPostsFilter;
-import ru.blog.services.ports.PostCommentsRepository;
 import ru.blog.services.PostsService;
+import ru.blog.services.ports.PostCommentsRepository;
 import ru.blog.services.ports.PostImagesRepository;
 import ru.blog.services.ports.PostLikesRepository;
 import ru.blog.services.ports.PostsRepository;
 
+@SpringBootTest(classes = {PostsRepository.class, PostImagesRepository.class, PostLikesRepository.class,
+    PostCommentsRepository.class, PostsService.class})
 public class PostServiceTests {
-  private static byte[] IMAGE = {72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100};
+  private static final byte[] IMAGE = {72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100};
 
-  private final PostsRepository postsRepository = Mockito.mock(PostsRepository.class);
+  @MockitoBean
+  private PostsRepository postsRepository;
 
-  private final PostImagesRepository imagesRepository = Mockito.mock(PostImagesRepository.class);
+  @MockitoBean
+  private PostImagesRepository imagesRepository;
 
-  private final PostLikesRepository postLikesRepository = Mockito.mock(PostLikesRepository.class);
+  @MockitoBean
+  private PostLikesRepository postLikesRepository;
 
-  private final PostCommentsRepository postCommentsRepository = Mockito.mock(PostCommentsRepository.class);
+  @MockitoBean
+  private PostCommentsRepository postCommentsRepository;
 
-  private final PostsService postsService =
-      new PostsService(postsRepository, imagesRepository, postLikesRepository, postCommentsRepository);
+  @Autowired
+  private PostsService postsService;
 
   @Nested
   class SavePostTests {
@@ -302,7 +311,7 @@ public class PostServiceTests {
     @Test
     void shouldThrowErrorOnGettingPostDetailsWithoutPageRequest() {
       Assertions.assertThrows(IllegalArgumentException.class, () -> {
-        postsService.searchPostPreview(new SearchPostsFilter(""),null);
+        postsService.searchPostPreview(new SearchPostsFilter(""), null);
       });
     }
 
