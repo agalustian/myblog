@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.blog.models.PostDetails;
 
-public class PostDetailsTest {
+class PostDetailsTest {
 
   @Test
   void shouldPrepareText() {

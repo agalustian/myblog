@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.blog.models.Post;
 
-public class PostTests {
+class PostTests {
   class TestPost extends Post {
     public TestPost(String id, String title, String text, String userId, List<String> tags, String createdAt,
                        String updatedAt) {

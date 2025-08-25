@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.blog.models.PostPreview;
 
-public class PostPreviewTests {
+class PostPreviewTests {
   @Test
   void shouldPrepareText() {
     var text = """
