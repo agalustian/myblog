@@ -19,7 +19,9 @@
             var newButton = document.createElement("button");
             newButton.innerHTML = "&#10003;";
             newButton.style="float:right;"
-            newComment.parentNode.appendChild(newButton);
+
+            const form = document.getElementById("editCommentForm-" + id);
+            form.appendChild(newButton);
         }
 
         function addComment(id) {
@@ -97,9 +99,9 @@
         </tr>
         <tr th:each="comment : ${postDetails.getComments()}">
             <td style="border-left:thin solid grey;">
-                <span th:id="${'comment'+comment.getId()}" th:text="${comment.getComment()}"></span>
-                <form th:if="${comment.getUserId() == 'CURRENT_USER'}" method="POST" th:action="${'/posts/'+postDetails.getId()+'/comments/'+comment.getId()+'/edit?userId=CURRENT_USER'}">
-                    <button th:id="${comment.getId()}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
+                <form th:id="${'editCommentForm-'+comment.getId()}" method="POST" th:action="${'/posts/'+postDetails.getId()+'/comments/'+comment.getId()+'/edit?userId=CURRENT_USER'}">
+                    <span th:id="${'comment'+comment.getId()}" th:text="${comment.getComment()}" ></span>
+                    <button th:id="${comment.getId()}" th:if="${comment.getUserId() == 'CURRENT_USER'}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
             <td>

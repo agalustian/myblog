@@ -26,7 +26,11 @@ public class PostCommentsService {
     Assert.notNull(userId, "User id is required for comment update");
     Assert.notNull(comment, "Comment is required for update");
 
-    postCommentsRepository.patchComment(commentId, userId, comment);
+    PostComment postComment = postCommentsRepository.getPostCommentByIdAndUserId(commentId, userId);
+
+    postComment.setComment(comment);
+
+    postCommentsRepository.save(postComment);
   }
 
   @Transactional

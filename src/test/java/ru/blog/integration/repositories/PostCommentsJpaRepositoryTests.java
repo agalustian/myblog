@@ -36,19 +36,6 @@ public class PostCommentsJpaRepositoryTests {
   }
 
   @Test
-  public void shouldUpdatePostComment() {
-    var comment = postCommentsRepository.getPostCommentsByPostId(postComment.getPostId()).getFirst();
-    var newComment = "new custom comment";
-
-    postCommentsRepository.patchComment(comment.getId(), comment.getUserId(), newComment);
-    entityManager.clear();
-
-    var updatedComment = postCommentsRepository.getPostCommentsByPostId(postComment.getPostId());
-
-    Assertions.assertEquals(newComment, updatedComment.getFirst().getComment());
-  }
-
-  @Test
   public void shouldFindPostCommentsCountForPosts() {
     postCommentsRepository.save(
         new PostComment(UUID.randomUUID().toString(), postComment.getPostId(), postComment.getUserId(),

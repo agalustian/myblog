@@ -14,20 +14,6 @@ public class PostCommentsRepositoryCustomImpl implements PostCommentsRepositoryC
     this.entityManager = entityManager;
   }
 
-  public void patchComment(final String id, String userId, String comment) {
-    var updateQuery = entityManager.createNativeQuery("""
-          update post_comments
-          set comment = :comment, updated_at = now()
-          where id = :id and user_id = :userId
-        """);
-
-    updateQuery.setParameter("comment", comment);
-    updateQuery.setParameter("id", id);
-    updateQuery.setParameter("userId", userId);
-
-    updateQuery.executeUpdate();
-  }
-
   @Override
   public Map<String, Integer> findPostsCommentsCount(final List<String> postIds) {
     var query = entityManager.createQuery("""

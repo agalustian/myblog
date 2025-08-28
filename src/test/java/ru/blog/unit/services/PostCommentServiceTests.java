@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.blog.generators.PostCommentsGenerator;
 import ru.blog.models.PostComment;
 import ru.blog.services.PostCommentsService;
 import ru.blog.services.ports.PostCommentsRepository;
@@ -46,9 +47,12 @@ public class PostCommentServiceTests {
 
     @Test
     void shouldSavePostComment() {
+      var postComment = PostCommentsGenerator.generate().getFirst();
+      Mockito.when(postCommentsRepository.getPostCommentByIdAndUserId(COMMENT_ID, USER_ID)).thenReturn(postComment);
+
       postCommentsService.update(COMMENT_ID, USER_ID, "testComment");
 
-      verify(postCommentsRepository, times(1)).patchComment(COMMENT_ID, USER_ID, "testComment");
+      verify(postCommentsRepository, times(1)).save(postComment);
     }
 
     @Test

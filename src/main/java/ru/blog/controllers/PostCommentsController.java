@@ -29,9 +29,11 @@ public class PostCommentsController {
   }
 
   @PostMapping("{comment_id}/edit")
-  String update(@RequestParam("userId") String userId, @PathVariable("id") String postId,
+  String update(@RequestParam("userId") String userId,
+                @PathVariable("id") String postId,
+                @PathVariable("comment_id") String commentId,
                 @RequestParam("text") String comment) {
-    postCommentsService.update(postId, userId, comment);
+    postCommentsService.update(commentId, userId, comment);
 
     return REDIRECT_PATH_TO_POST + postId;
   }
