@@ -21,24 +21,27 @@ public class PostCommentsController {
   }
 
   @PostMapping
-  String save(@PathVariable("id") String postId, @RequestParam("text") String comment) {
-    postCommentsService.save(PostComment.from(postId, "CURRENT_USER", comment));
+  String save(@RequestParam("userId") String userId, @PathVariable("id") String postId,
+              @RequestParam("text") String comment) {
+    postCommentsService.save(PostComment.from(postId, userId, comment));
 
-    return  REDIRECT_PATH_TO_POST+postId;
+    return REDIRECT_PATH_TO_POST + postId;
   }
 
   @PostMapping("{comment_id}/edit")
-  String update(@PathVariable("id") String postId, @RequestParam("text") String comment) {
-    postCommentsService.update(postId, "CURRENT_USER", comment);
+  String update(@RequestParam("userId") String userId, @PathVariable("id") String postId,
+                @RequestParam("text") String comment) {
+    postCommentsService.update(postId, userId, comment);
 
-    return REDIRECT_PATH_TO_POST+postId;
+    return REDIRECT_PATH_TO_POST + postId;
   }
 
   @PostMapping("{comment_id}/delete")
-  String remove(@PathVariable("id") String postId, @PathVariable("comment_id") String commentId) {
-    postCommentsService.remove(commentId, "CURRENT_USER");
+  String remove(@RequestParam("userId") String userId, @PathVariable("id") String postId,
+                @PathVariable("comment_id") String commentId) {
+    postCommentsService.remove(commentId, userId);
 
-    return REDIRECT_PATH_TO_POST+postId;
+    return REDIRECT_PATH_TO_POST + postId;
   }
 
 }

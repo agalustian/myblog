@@ -29,7 +29,9 @@ public class PostsController {
   }
 
   @PostMapping()
-  public String save(@RequestParam("text") String text, @RequestParam("title") String title,
+  public String save(@RequestParam("userId") String userId,
+                     @RequestParam("text") String text,
+                     @RequestParam("title") String title,
                      @RequestParam("tags") String tags,
                      @RequestParam("image")
                      MultipartFile image)
@@ -38,7 +40,7 @@ public class PostsController {
       var imageStream = image.getInputStream();
 
       var postDetails =
-          new PostDetails(null, title, text, "CURRENT_USER", Arrays.stream(tags.split(" ")).toList(), null, null);
+          new PostDetails(null, title, text, userId, Arrays.stream(tags.split(" ")).toList(), null, null);
       postsService.save(postDetails, imageStream);
     } catch (IOException e) {
       throw e;
@@ -48,8 +50,11 @@ public class PostsController {
   }
 
   @PostMapping("/{id}")
-  public String update(@PathVariable(value = "id") String postId, @RequestParam("text") String text,
-                       @RequestParam("title") String title, @RequestParam("tags") String tags,
+  public String update(@RequestParam("userId") String userId,
+                       @PathVariable(value = "id") String postId,
+                       @RequestParam("text") String text,
+                       @RequestParam("title") String title,
+                       @RequestParam("tags") String tags,
                        @RequestParam("image")
                        MultipartFile image)
       throws IOException {
@@ -57,7 +62,7 @@ public class PostsController {
       var imageStream = image.getInputStream();
 
       var postDetails =
-          new PostDetails(postId, title, text, "CURRENT_USER", Arrays.stream(tags.split(" ")).toList(), null, null);
+          new PostDetails(postId, title, text, userId, Arrays.stream(tags.split(" ")).toList(), null, null);
       postsService.update(postDetails, image.isEmpty() ? null : imageStream);
     } catch (IOException e) {
       throw e;
@@ -90,8 +95,8 @@ public class PostsController {
   }
 
   @PostMapping("/{id}/delete")
-  public String removePost(@PathVariable(name = "id") String postId) {
-    postsService.remove(postId, "CURRENT_USER");
+  public String removePost(@RequestParam("userId") String userId, @PathVariable(name = "id") String postId) {
+    postsService.remove(postId, userId);
 
     return "redirect:/posts";
   }
@@ -108,13 +113,12 @@ public class PostsController {
 
     List<PostPreview> postPreviews = postsService.searchPostPreview(searchFilter, pageRequest);
 
-    if (postPreviews != null && !postPreviews.isEmpty() ) {
+    if (postPreviews != null && !postPreviews.isEmpty()) {
       Integer totalCount = postsService.searchPostPreviewCount(searchFilter);
 
       model.addAttribute("posts", postPreviews);
       model.addAttribute("paging",
           new Paging(pageRequest.getPageNumber(), pageRequest.getPageSize(), totalCount));
-
     }
 
     return "posts";
@@ -127,9 +131,9 @@ public class PostsController {
   }
 
   // TODO get userID from authentication headers
-  @GetMapping("/{id}/like")
-  public String togglePostLike(@PathVariable("id") String postId, @RequestParam(value = "userId", required = false) String userId) {
-    postsService.togglePostLike(postId, "CURRENT_USER");
+  @PostMapping("/{id}/like")
+  public String togglePostLike(@RequestParam("userId") String userId, @PathVariable("id") String postId) {
+    postsService.togglePostLike(postId, userId);
 
     return "redirect:/posts/" + postId;
   }
