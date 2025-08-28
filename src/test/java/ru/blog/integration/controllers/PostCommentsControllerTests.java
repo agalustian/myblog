@@ -58,7 +58,9 @@ public class PostCommentsControllerTests {
 
   @Test
   void shouldSavePostComment() throws Exception {
-    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/comments").param("text", "test-text"))
+    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/comments")
+            .param("text", "test-text")
+            .param("userId", "Иванов"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c"));
   }
@@ -66,8 +68,9 @@ public class PostCommentsControllerTests {
   @Test
   void shouldEditPostComment() throws Exception {
     mockMvc.perform(
-            post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/comments/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/edit").param(
-                "text", "new-test-text"))
+            post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/comments/726f8caf-366a-4f2d-a5a4-b7ebd4390e9c/edit")
+                .param("text", "new-test-text")
+                .param("userId", "Иванов"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c"));
   }
@@ -75,7 +78,7 @@ public class PostCommentsControllerTests {
   @Test
   void shouldDeletePostComment() throws Exception {
     mockMvc.perform(
-            post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/comments/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/delete"))
+            post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/comments/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/delete?userId=Иванов"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c"));
   }
