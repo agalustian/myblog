@@ -9,4 +9,6 @@ public interface PostCommentsRepository extends PostCommentsRepositoryCustom, Jp
   void removePostCommentByIdAndUserId(String id, String userId);
 
   List<PostComment> getPostCommentsByPostId(String postId);
+
+  PostComment getPostCommentByIdAndUserId(String id, String userId);
 }

@@ -91,7 +91,7 @@ class PostsControllerTests {
   @Test
   void shouldEditPost() throws Exception {
     byte[] image = {108};
-    mockMvc.perform(multipart("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c")
+    mockMvc.perform(multipart("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c?userId=Иванов")
             .file(new MockMultipartFile("image", image))
             .param("text", "test1")
             .param("title", "test2")
@@ -106,7 +106,7 @@ class PostsControllerTests {
   @Test
   void shouldSavePost() throws Exception {
     byte[] image = {108};
-    mockMvc.perform(multipart("/posts")
+    mockMvc.perform(multipart("/posts?userId=Иванов")
             .file(new MockMultipartFile("image", image))
             .param("text", "test1")
             .param("title", "test2")
@@ -120,25 +120,25 @@ class PostsControllerTests {
 
   @Test
   void shouldDeletePost() throws Exception {
-    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/delete"))
+    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/delete?userId=Иванов"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts"));
   }
 
   @Test
   void shouldToggleLike() throws Exception {
-    mockMvc.perform(get("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/like?userId=CURRENT_USER"))
+    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/like?userId=CURRENT_USER"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c"));
   }
 
   @Test
   void shouldSetLikeAndRemoveLikeForSpecifiedPost() throws Exception {
-    mockMvc.perform(get("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/like?userId=CURRENT_USER"))
+    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/like?userId=CURRENT_USER"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c"));
 
-    mockMvc.perform(get("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/like?userId=CURRENT_USER"))
+    mockMvc.perform(post("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c/like?userId=CURRENT_USER"))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/posts/726f8caf-366a-4f2d-a5a4-b7ebd4310e9c"));
   }

@@ -19,7 +19,9 @@
             var newButton = document.createElement("button");
             newButton.innerHTML = "&#10003;";
             newButton.style="float:right;"
-            newComment.parentNode.appendChild(newButton);
+
+            const form = document.getElementById("editCommentForm-" + id);
+            form.appendChild(newButton);
         }
 
         function addComment(id) {
@@ -49,12 +51,12 @@
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
             <td>
-                <form method="GET" th:action="${'/posts/'+postDetails.getId()+'/edit'}">
+                <form method="GET" th:action="${'/posts/'+postDetails.getId()+'/edit?userId=CURRENT_USER'}">
                     <button style="float:right;">РЕДАКТИРОВАТЬ ПОСТ</button>
                 </form>
             </td>
             <td>
-                <form method="POST" th:action="${'/posts/'+postDetails.getId()+'/delete'}">
+                <form method="POST" th:action="${'/posts/'+postDetails.getId()+'/delete?userId=CURRENT_USER'}">
                     <button style="float:right;">УДАЛИТЬ ПОСТ</button>
                 </form>
             </td>
@@ -66,7 +68,7 @@
                     <img height="300" th:src="${'http://localhost:8080/posts/'+postDetails.getId()+'/image'}">
                 </p>
                 <p>
-                    <form th:action="${'/posts/'+postDetails.getId()+'/like'}" method="postDetails">
+                    <form th:action="${'/posts/'+postDetails.getId()+'/like?userId=CURRENT_USER'}" method="POST">
                         <button>&#x1F44D;</button>
                         <span th:text="${postDetails.getLikesCount()}"></span>
                         <span th:text="${'комментарии '+postDetails.getComments().size()}" style="float:right;"></span>
@@ -90,20 +92,20 @@
         </tr>
         <tr>
             <td>
-                <form id="addCommentForm" th:action="${'/posts/'+postDetails.getId()+'/comments'}" method="POST">
+                <form id="addCommentForm" th:action="${'/posts/'+postDetails.getId()+'/comments?userId=CURRENT_USER'}" method="POST">
                     <button id="addCommentButton" style="float:right;" onclick="addComment()">Добавить комментарий</button>
                 </form>
             </td>
         </tr>
         <tr th:each="comment : ${postDetails.getComments()}">
             <td style="border-left:thin solid grey;">
-                <span th:id="${'comment'+comment.getId()}" th:text="${comment.getComment()}"></span>
-                <form th:if="${comment.getUserId() == 'CURRENT_USER'}" method="POST" th:action="${'/posts/'+postDetails.getId()+'/comments/'+comment.getId()+'/edit'}">
-                    <button th:id="${comment.getId()}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
+                <form th:id="${'editCommentForm-'+comment.getId()}" method="POST" th:action="${'/posts/'+postDetails.getId()+'/comments/'+comment.getId()+'/edit?userId=CURRENT_USER'}">
+                    <span th:id="${'comment'+comment.getId()}" th:text="${comment.getComment()}" ></span>
+                    <button th:id="${comment.getId()}" th:if="${comment.getUserId() == 'CURRENT_USER'}" onclick="editComment(this.id)" style="float:right;">&#9998;</button>
                 </form>
             </td>
             <td>
-                <form th:if="${comment.getUserId() == 'CURRENT_USER'}" method="POST" th:action="${'/posts/'+postDetails.getId()+'/comments/'+comment.getId()+'/delete'}">
+                <form th:if="${comment.getUserId() == 'CURRENT_USER'}" method="POST" th:action="${'/posts/'+postDetails.getId()+'/comments/'+comment.getId()+'/delete?userId=CURRENT_USER'}">
                     <button style="float:right;">&#10007;</button>
                 </form>
             </td>

@@ -68,7 +68,7 @@ public class PostComment {
     this.userId = userId;
   }
 
-  private void setComment(String comment) {
+  public void setComment(String comment) {
     this.comment = comment;
   }
 
