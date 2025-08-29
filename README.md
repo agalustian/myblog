@@ -9,20 +9,20 @@ Create posts, comments to posts and like them!
 - [Project structure](#Project-structure)
 - [Useful commands](#Usefull-commands)
 
-## `!NOTE` Project don't use `spring-boot` in current project, until time good times will come.
-
 ## Tech stack
 Language: `Java 21`
 
-Dep.Injection: `Spring core`
+Framework: `Spring core + Spring boot`
 
-Test tools: `Spring test context \ JUNIT 5 \ Jupiter \ Mockito`
+Test tools: `Spring boot test \ JUNIT 5 \ Jupiter \ Mockito`
 
-Build tools: `Gradle`
+Build tools: `Maven`
 
 HTML templates: `Thymeleaf` 
 
 Database driver: `JDBC`
+
+Observability: `Actuator`
 
 ## Known issues
 Visit, please, `ISSUES.md` file in the project root for problems list.
@@ -44,7 +44,6 @@ We're respecting:
 Project use `MVC` architecture
 
 ### Future concerns:
-- Using `spring-boot`;
 - Migrate to `Hexagonal architecture`;
 - Moving to `SPA` instead of templates.
 
@@ -58,9 +57,16 @@ Project use `MVC` architecture
 
 ## Usefull commands
 
-Run tests: `./gradlew test`
+Run unit tests: `./mvnw test`
 
-build war: `./gradlew war`
+Run integration tests: `./mvnw verify`
 
-After war building copy `.war` from `./app/target/myblog/myblog.war` to your http server (tomcat)
-command example: `cd myblog && ./gradlew war && cd .. && cp ./myblog/app/target/myblog/myblog.war ./apache-tomcat-10.1.41/webapps/myblog.war && sh ./apache-tomcat-10.1.41/bin/catalina.sh stop && sleep 5  && sh ./apache-tomcat-10.1.41/bin/catalina.sh jpda start`
+Build jar: `./mvnw clean install`
+
+## Actuator endpoints
+Opened actuator endpoints list:
+- health
+- info
+- metrics
+
+Example: `localhost:8080/actuator/metrics`
